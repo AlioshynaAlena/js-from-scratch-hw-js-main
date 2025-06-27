@@ -30,16 +30,14 @@ const map = (array, callback) => {
 
     for (let i = 0; i < array.length; i++) {
         const element = array[i];
-        if (callback(element, i)) {
-            newArray.push(element * 2)
-        }
+        newArray.push(callback(element, i))
     }
     return newArray
 }
 
 
 const doubledNumbers = map(numbers, (element, i) => {
-    return element
+    return element * 2
 });
 
 console.log(doubledNumbers)

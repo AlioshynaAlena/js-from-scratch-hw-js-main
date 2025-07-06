@@ -35,12 +35,17 @@ function updateImage() {
 nextButton.addEventListener('click', () => {
     i = (i + 1) % WEB_TECH_IMAGES.length;
     updateImage();
+    //Возвращает остаток от деления (i + 1) на WEB_TECH_IMAGES.length.
+    //Это гарантирует, что индекс никогда не выйдет за границы массива.
 });
 
 // Обработчик для кнопки "prev"
 prevButton.addEventListener('click', () => {
     i = (i - 1 + WEB_TECH_IMAGES.length) % WEB_TECH_IMAGES.length;
     updateImage();
+    //i-1 - Уменьшает текущий индекс на 1 (переход к предыдущему элементу)
+    //+ WEB_TECH_IMAGES.length - Добавляет длину массива, чтобы избежать отрицательных значений
+    //% WEB_TECH_IMAGES.length - Обеспечивает циклический переход 
 });
 
 // Инициализация - устанавливаем первое изображение

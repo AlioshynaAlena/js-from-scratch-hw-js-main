@@ -13,7 +13,7 @@ function truncate(str, maxLength) {
     let result;
     for (let i = 0; i < str.length; i++) {
         if (str.length > maxLength) {
-            result = str.slice(0, 20, ) + "..."
+            result = str.slice(0, maxLength) + "..."
         } else {
             result = str
         }

@@ -13,13 +13,12 @@ function truncate(str, maxLength) {
     let result;
     if (str.length > maxLength) {
         result = str.slice(0, maxLength) + "..."
-    } else if (str.length === 0 || str.length < maxLength) {
+    } else if (str.length === 0 || str.length <= maxLength) {
         result = str
     }
 
     return result
 }
-
 
 console.log(truncate("Вот, что мне действительно нравится в этом", 20)); //// Ожидаемый результат: "Вот, что мне действи..."
 console.log(truncate("Короткая строка", 20)); // Ожидаемый результат: "Короткая строка"

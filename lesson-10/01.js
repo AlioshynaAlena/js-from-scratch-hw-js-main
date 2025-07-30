@@ -22,79 +22,105 @@
 */
 
 const model = {
-  movies: [],
-  addMovie(title, description) {
-    const id = Math.random()
-    const newMovie = { id, title, description }
-    this.movies.push(newMovie)
-    view.renderMovies(this.movies)
-  },
-  // your code
+    //здесь будут храниться фильмы
+    movies: [],
+    addMovie(title, description) {
+        const id = Math.random()
+        const newMovie = { id, title, description }
+        this.movies.push(newMovie)
+        view.renderMovies(this.movies)
+    },
+    // your code
+    deleteMovie(movieId) {
+        this.movies = this.movies.filter((movie) => {
+            return movie.id !== movieId
+        })
+        view.renderMovies(this.movies)
+    }
 }
 
 const view = {
-  init() {
-    this.renderMovies(model.movies)
+    init() {
+        //метод init дергает render и отдает из модели те фильмы, которые есть в моделе
+        this.renderMovies(model.movies)
 
-    const form = document.querySelector('.form')
-    const inputTitle = document.querySelector('.input-title')
-    const inputDescription = document.querySelector('.input-description')
+        const form = document.querySelector('.form')
+        const inputTitle = document.querySelector('.input-title')
+        const inputDescription = document.querySelector('.input-description')
+            //при отправке формы будет выполняться событие
+        form.addEventListener('submit', function(event) {
+            //стоп перезагрузка
+            event.preventDefault()
+            const title = inputTitle.value //берем у input значение, которое ввели в value
+            const description = inputDescription.value //берем у input значение, которое ввели в value
+            controller.addMovie(title, description) //Мы говорим контроллеру, что мы данные собрали, пожалуйста, добавь задачу с таким title, description. 
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault()
-      const title = inputTitle.value
-      const description = inputDescription.value
-      controller.addMovie(title, description)
 
-      inputTitle.value = ''
-      inputDescription.value = ''
-    })
+            inputTitle.value = '' //обнуляем поле
+            inputDescription.value = ''
+        })
 
-    // your code
-  },
-  renderMovies(movies) {
-    const list = document.querySelector('.list')
-    let moviesHTML = ''
+        // your code
 
-    for (const movie of movies) {
-      moviesHTML += `
+        const ul = document.querySelector('.list')
+        ul.addEventListener("click", (event) => {
+            if (event.target.classList.contains('delete-button')) {
+                const movieId = +event.target.parentElement.id
+                controller.deleteMovie(movieId)
+            }
+        })
+    },
+    //render - только отрисовывает
+    //принимаем какие-то фильмы из массива и что-то с ним делает 
+    renderMovies(movies) {
+        //находим элемент в DOM с классом .list и сохраняем в переменную list (ul наша)
+        const list = document.querySelector('.list')
+            //создаем строковую переменную
+        let moviesHTML = ''
+            //идем циклом по массиву movies и находя каждый фильм записываем в переменную let moviesHTML фильмы, то есто генерируем li  
+        for (const movie of movies) {
+            moviesHTML += `
         <li id="${movie.id}" class="movie">
           <b class="movie-title">${movie.title}</b>
           <p class="movie-description">${movie.description}</p>
           <button class="delete-button" type="button">Удалить 🗑</button>
         </li>
       `
-    }
-
-    list.innerHTML = moviesHTML
-  },
-  displayMessage(message, isError = false) {
-    const messageBox = document.querySelector('.message-box')
-    messageBox.textContent = message
-    if (isError) {
-      messageBox.classList.remove('success')
-      messageBox.classList.add('error')
-    } else {
-      messageBox.classList.remove('error')
-      messageBox.classList.add('success')
-    }
-  },
+        }
+        //добавили в ul c классом list строчку moviesHTML фильмами
+        list.innerHTML = moviesHTML
+    },
+    displayMessage(message, isError = false) {
+        const messageBox = document.querySelector('.message-box')
+        messageBox.textContent = message
+        if (isError) {
+            messageBox.classList.remove('success')
+            messageBox.classList.add('error')
+        } else {
+            messageBox.classList.remove('error')
+            messageBox.classList.add('success')
+        }
+    },
 }
 
 const controller = {
-  addMovie(title, description) {
-    if (title.trim() !== '' && description.trim() !== '') {
-      model.addMovie(title, description)
-      view.displayMessage('Фильм добавлен успешно!')
-    } else {
-      view.displayMessage('Заполните все поля!', true)
+    //Вызываем метод addMovie контроллера
+    addMovie(title, description) {
+        if (title.trim() !== '' && description.trim() !== '') {
+            model.addMovie(title, description)
+            view.displayMessage('Фильм добавлен успешно!')
+        } else {
+            view.displayMessage('Заполните все поля!', true)
+        }
+    },
+    // your code
+    deleteMovie(movieId) {
+        model.deleteMovie(movieId)
     }
-  },
-  // your code
 }
 
 function init() {
-  view.init()
+    view.init()
 }
 
 document.addEventListener('DOMContentLoaded', init)
